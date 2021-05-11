@@ -27,30 +27,24 @@ public class MainTest {
 
     }
 
-    @Test(enabled = true)
+    @Test(alwaysRun = true)
     public void Test1() throws InterruptedException {
-        System.out.println("TEST1");
-        //clickOnMenu
 
-        System.out.println("bbbbb");
+//        в разделе "Электроинструменты" / "Дрели" на  трех товарах с акционным тикетом  проверить есть ли в карточке товара акционная цена
+//        Для этого, из раздела "Электроинструменты"  перейти в раздел "Дрели"  используя меню.
+//        Рандомно, на страничке выбрать товар, провалиться в карточку товара и проверить наличие акционной и старой цены
+//        Так для 3-х товаров (выбор количества проверяемых товаров сделать гибким)
 
+        //sizeElements
         Actions actions = new Actions(driver);
         driver.findElement(By.xpath("//a[@href='/catalog/']")).click();
         WebElement menu = driver.findElement(By.xpath("//a[@href='/catalog/elektroinstrument/']"));
         WebElement elementInMenu = driver.findElement(By.xpath("//a[@href='/catalog/dreli/']"));
         actions.moveToElement(menu).moveToElement(elementInMenu).click().build().perform();
 
-
-//        driver.findElement(By.xpath("//a[@href='/catalog/elektroinstrument/']")).click();
-//        driver.findElement(By.xpath("//a[@title='Дрели']")).click();
-//        driver.findElements(By.className("old-price"));
-
-
-        //sizeElements
-
         List<WebElement> xpath = driver.findElements(By.xpath("//span[@style='display:block;']"));
-        int xpathCount = xpath.size();
-        System.out.println("Total xpath: " + xpathCount);
+        int salesCards = xpath.size();
+        System.out.println("SalesCards: " + salesCards);
 
         int numberCards = 3;
 
@@ -59,7 +53,7 @@ public class MainTest {
             //numberRandomCards
 
             int min = 1;
-            int max = xpathCount;
+            int max = salesCards;
             int diff = max - min;
             Random random = new Random();
             int j = random.nextInt(diff + 1) + min;
@@ -70,8 +64,9 @@ public class MainTest {
             if (driver.findElements(By.xpath("//span[@class='item_old_price old-price']")).size() != 0) {
                 System.out.println("Element old_price is Present");
 
-                int ede = driver.findElements(By.xpath("//span[@class='item_old_price old-price']")).size();
-                System.out.println(ede);
+                int olldPriceOfCards = driver.findElements(By.xpath("//span[@class='item_old_price old-price']")).size();
+
+                //  System.out.println(olldPriceOfCards);
 
             } else {
                 // Assert.fail("Element old_price is NOT Present");
@@ -89,10 +84,13 @@ public class MainTest {
         }
     }
 
-    @Test(dependsOnMethods = {"Test1"}, alwaysRun = true)
+    @Test(alwaysRun = true)
     public void Test2() throws InterruptedException {
 
-        System.out.println("TEST2");
+        System.out.println("----------------------TEST2-----------------------");
+
+//            Перейти в раздел "Электроинструменты" / "Перфораторы"
+//            Проверить, что у всех товаров этого раздела есть цена на первых двух страницах.
 
 //            Actions builder = new Actions(driver);
 //            builder.moveToElement(driver.findElement(By.xpath("//a[@href='/catalog/']")));
@@ -112,12 +110,12 @@ public class MainTest {
         System.out.println("Value lists: " + listCount);
         int elmtNumber = 0;
         int valuePage = 2;
+
         for (int i = 1; i <= valuePage; i++) {
 
             for (int j = 0; j < listCount; j++) {
                 elmtNumber++;
                 if (driver.findElements(By.xpath("//span[@class='price']")).size() != 0) {
-                    // Assert.fail(elmtNumber+"Element price is Present");
                     System.out.println(elmtNumber + " Element price is Present");
                 } else {
                     // Assert.fail(elmtNumber+"Element price is NOT Present");
@@ -127,36 +125,45 @@ public class MainTest {
             if (i < valuePage) driver.findElement(By.partialLinkText("Следующая")).click();
         }
 
-        System.out.println("TEST2");
+
     }
 
-    @Test
+    @Test(alwaysRun = true)
     public void Test3() throws InterruptedException {
 //        Перейти в раздел "Электроинструменты" / "Шуруповерты"
 //        Вывести "Наименование" всех товаров у которых есть иконка с американским флагом на первых 3х страницах
 
-        System.out.println("TEST3");
+        System.out.println("----------------------TEST3-----------------------");
+
         Actions aactions = new Actions(driver);
         driver.findElement(By.xpath("//a[@href='/catalog/']")).click();
         WebElement menu = driver.findElement(By.xpath("//a[@href='/catalog/elektroinstrument/']"));
         WebElement elementInMenu = driver.findElement(By.xpath("//a[@href='/catalog/shurupoverty/']"));
         aactions.moveToElement(menu).moveToElement(elementInMenu).click().build().perform();
 
+        String USA = driver.findElement(By.xpath("//a[@class='title google_detail_link']/span")).getText() + " it USA";
         int numbrPages = 3;
-        int USAPath = driver.findElements(By.xpath("//img[contains(@src, 'United_states.jpg')]")).size();
-        System.out.println(USAPath);
-        for (int i = 1; i <= numbrPages; i++) {
+        int USAPath;
 
-            for (int j = 0; j <= USAPath; j++) {
-                System.out.println(driver.findElement(By.xpath("//a[@class='title google_detail_link']/span")).getText() + " it USA");
+        for (int i = 1; i <= numbrPages; i++) {
+            System.out.println("Number Page: " + i);
+            USAPath = driver.findElements(By.xpath("//img[contains(@src, 'United_states.jpg')]")).size();
+            System.out.println("Number USA Flugs: " + USAPath);
+
+            for (int j = 1; j <= USAPath; j++) {
+                //"//a[@class='title google_detail_link']/span"
+                System.out.println(driver.findElement(By.xpath("(//img[contains(@src, 'United_states.jpg')]/../../..//h4[@class='s_title'])["+j+"]")).getText() + " it USA");
+
             }
+            System.out.println("\n");
             if (i < numbrPages) driver.findElement(By.partialLinkText("Следующая")).click();
+
         }
     }
 
-    @Test
+    @Test(alwaysRun = true)
     public void Test4() throws InterruptedException {
-        System.out.println("TEST4");
+        System.out.println("----------------------TEST4-----------------------");
 //        В разделе "Электроинструменты" / "Болгарки"
 //        Для 10 рандомных товаров с пометкой "Акция" провести расчет акционной цены относительно старой используя процент скидки.
 //        В assert упавшего теста вывести наименование товара его ожидаемую и фактическую цену.
@@ -179,23 +186,29 @@ public class MainTest {
         int cardsCount = 2;
         int actualRezult;
         int expectedResult;
+        int counter = 0;
+        int ExpectedRezultValue;
+        //value for random
+        int min = 1;
+        int max = cardsCount;
+        int diff = max - min;
 
         while (valueWere < 10) {
 
             for (int i = 0; i < 2; i++) {
+                counter++;
 
                 //numberRandomCards
                 List<WebElement> cardsOfSales = driver.findElements(By.xpath("//span[@style='display:block;']"));
                 cardsCount = cardsOfSales.size();
+
                 //generateRandom
-                System.out.println("Total xpath: " + cardsCount);
-                int min = 1;
-                int max = cardsCount;
-                int diff = max - min;
+
+
                 Random random = new Random();
                 j = random.nextInt(diff + 1) + min;
-                System.out.println();
 
+                //getting and compare result
                 oldPrice = driver.findElement(By.xpath("(//span[contains(text(),'%')]/../../../..//span[@class='old-price'])[" + j + "]")).getText();
 
                 valueOldPrice = Integer.parseInt(oldPrice.replaceAll("[^0-9]", ""));
@@ -210,18 +223,17 @@ public class MainTest {
 
                 nameWere = driver.findElement(By.xpath("(//span[@style='display:block;']/../../../..//h4[@class='s_title']//span)[" + j + "]")).getText();
 
-
                 actualRezult = (valueOldPrice + sale) / 100;
-                int actualREZULT = valuePrice - actualRezult;
+
+                ExpectedRezultValue = valuePrice - actualRezult;
                 expectedResult = valuePrice;
 
-
-                // Assert.assertNotEquals(actualREZULT, expectedResult,nameWere);
-                System.out.println(valueWere + ".NAME_WERE: " + nameWere + "; RAND=" + j + ";\n ACTUAL PRICE: " + actualREZULT + ";\n OLD PRICE: " + valueOldPrice + ";\n EXPECTED RESULT: " + expectedResult + ";\n SALE: " + sale + "%");
-
+                //Assert.assertEquals(ExpectedRezultValue,actualRezultValue,nameWere);
+                System.out.println(counter + ".NAME_WERE: " + nameWere + ";\n Total sales cards: " + cardsCount + ";\n RAND=" + j + ";\n ACTUAL PRICE: " + price + ";\n OLD PRICE: " + valueOldPrice + ";\n EXPECTED RESULT: " + ExpectedRezultValue + ";\n SALE: " + sale + "%");
+                valueWere++;
             }
             driver.findElement(By.partialLinkText("Следующая")).click();
-            valueWere++;
+
         }
     }
 
