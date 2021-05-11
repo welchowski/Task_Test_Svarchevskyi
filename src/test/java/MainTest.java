@@ -7,7 +7,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
-
+//
 import java.util.*;
 
 public class MainTest {
@@ -32,7 +32,7 @@ public class MainTest {
         System.out.println("TEST1");
         //clickOnMenu
 
-
+        System.out.println("bbbbb");
 
         Actions actions = new Actions(driver);
         driver.findElement(By.xpath("//a[@href='/catalog/']")).click();
@@ -69,7 +69,7 @@ public class MainTest {
 
             if (driver.findElements(By.xpath("//span[@class='item_old_price old-price']")).size() != 0) {
                 System.out.println("Element old_price is Present");
- 
+
                 int ede = driver.findElements(By.xpath("//span[@class='item_old_price old-price']")).size();
                 System.out.println(ede);
 
