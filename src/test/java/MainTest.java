@@ -3,7 +3,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
-import org.testng.Assert;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
@@ -143,17 +142,16 @@ public class MainTest {
 
         String USA = driver.findElement(By.xpath("//a[@class='title google_detail_link']/span")).getText() + " it USA";
         int numbrPages = 3;
-        int USAPath;
+        int USANumber;
 
         for (int i = 1; i <= numbrPages; i++) {
             System.out.println("Number Page: " + i);
-            USAPath = driver.findElements(By.xpath("//img[contains(@src, 'United_states.jpg')]")).size();
-            System.out.println("Number USA Flugs: " + USAPath);
+            USANumber = driver.findElements(By.xpath("//img[contains(@src, 'United_states.jpg')]")).size();
+            System.out.println("Number USA Flugs: " + USANumber);
 
-            for (int j = 1; j <= USAPath; j++) {
-                //"//a[@class='title google_detail_link']/span"
-                System.out.println(driver.findElement(By.xpath("(//img[contains(@src, 'United_states.jpg')]/../../..//h4[@class='s_title'])["+j+"]")).getText() + " it USA");
+            for (int j = 1; j <= USANumber; j++) {
 
+                System.out.println(driver.findElement(By.xpath("(//img[contains(@src, 'United_states.jpg')]/../../..//h4[@class='s_title'])[" + j + "]")).getText() + " it USA");
             }
             System.out.println("\n");
             if (i < numbrPages) driver.findElement(By.partialLinkText("Следующая")).click();
