@@ -216,7 +216,7 @@ public class MainTest {
                 expectedResult = valuePrice;
 
 
-                // Assert.assertNotEquals(actualREZULT, expectedResult,nameWere);
+                Assert.assertEquals(actualREZULT, expectedResult,nameWere);
                 System.out.println(valueWere + ".NAME_WERE: " + nameWere + "; RAND=" + j + ";\n ACTUAL PRICE: " + actualREZULT + ";\n OLD PRICE: " + valueOldPrice + ";\n EXPECTED RESULT: " + expectedResult + ";\n SALE: " + sale + "%");
 
             }
